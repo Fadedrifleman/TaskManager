@@ -3,7 +3,7 @@ const Task = require('../models/task');
 const getAllTasks = async(req,res) => {
     try {
         const task = await Task.find({});
-        res.status(200).json({task});
+        res.status(201).json({task});
     } catch (error) {
         res.status(500).json({Error: error});
     }}
@@ -19,11 +19,11 @@ const createTask = async(req,res) => {
 
 const getTask = async(req,res) => {
     try {
-        const result = await Task.findById(req.params.id);
-        if(!result){
+        const task = await Task.findById(req.params.id);
+        if(!task){
             return res.status(404).json({msg: `No task found with ID: ${req.params.id}`})
         }
-        res.status(200).json({result});
+        res.status(201).json({task});
     } catch (error) {
         res.status(500).json({Error: error.message});
     }    
@@ -31,11 +31,11 @@ const getTask = async(req,res) => {
 
 const updateTask = async(req,res) => {
     try {
-        const result = await Task.findOneAndUpdate({_id: req.params.id}, req.body, {new: true});
-        if(!result){
+        const task = await Task.findOneAndUpdate({_id: req.params.id}, req.body, {new: true, runValidators: true});
+        if(!task){
             return res.status(404).json({msg: `No task found with ID: ${req.params.id}`})
         }
-        res.status(200).json({result});
+        res.status(201).json({task});
     } catch (error) {
         res.status(500).json({Error: error});
     }
@@ -43,11 +43,11 @@ const updateTask = async(req,res) => {
 
 const deleteTask = async(req,res) => {
     try {
-        const result = await Task.deleteOne({_id: req.params.id});
-        if(!result){
+        const task = await Task.deleteOne({_id: req.params.id});
+        if(!task){
             return res.status(404).json({msg: `No task found with ID: ${req.params.id}`})
         }
-        res.status(200).send('Deleted');
+        res.status(201).send('Deleted');
     } catch (error) {
         res.status(500).json({Error: error});
     }
